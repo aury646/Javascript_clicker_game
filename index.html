@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <button id="mainBtn"><img src="https://www.rottler.com/wp-content/uploads/medow-mouse.jpg"></button>
+    
+    <button id="upgradeBtn">Upgrade</button>
+</body>
+
+<script>
+    const el = document.getElementById("mainBtn")
+    const btn = document.getElementById("btn")
+    const upgradeBtn = document.getElementById("upgradeBtn")
+
+    let amount = 0
+    let bonus = 1
+    let cost = 25
+
+    mainBtn.addEventListener("click", () => {
+        amount += bonus
+        el.innerHTML = amount
+     
+    })
+
+    function upgrade() {
+        if (amount >= cost) {
+            amount -= cost
+            bonus *= 2
+            cost *= 2
+            el.innerHTML = amount
+        } else {
+            alert(`Nepietiek līdzekļu! Jums ir ${amount}, nepieciešams ${cost}!`)
+        }
+    }
+
+    upgradeBtn.addEventListener("click", upgrade)
+
+</script>
+</html>
