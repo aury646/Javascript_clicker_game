@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="myId">Virsraksts</h1>
+    <button id="btn">Poga</button>
+    <button id="upgradeBtn">Upgrade</button>
+</body>
+
+<script>
+    const el = document.getElementById("myId")
+    const btn = document.getElementById("btn")
+    const upgradeBtn = document.getElementById("upgradeBtn")
+
+    let amount = 0
+    let bonus = 1
+    let cost = 25
+
+    btn.addEventListener("click", () => {
+        amount += bonus
+        el.innerHTML = amount
+        el.style.color = "red"
+    })
+
+    function upgrade() {
+        if (amount >= cost) {
+            amount -= cost
+            bonus *= 2
+            cost *= 2
+            el.innerHTML = amount
+        } else {
+            alert(`Nepietiek līdzekļu! Jums ir ${amount}, nepieciešams ${cost}!`)
+        }
+    }
+
+    upgradeBtn.addEventListener("click", upgrade)
+
+    console.log(el.innerHTML)
+
+    if (el.innerHTML === "Virsraksts") {
+        console.log("Elementa innerHTML ir 'Virsraksts'")
+    }
+</script>
+
+</html>

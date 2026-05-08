@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="script.js"></script> -->
+     <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <h1 id="myId">Notis</h1>
+    <button id="btn"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/%D0%9C%D1%8B%D1%88%D1%8C_2.jpg" id="mouseLevel1"></button>
+    <button id="upgradeBtn">Upgrade</button>
+    <!--
+        Event listeners var pievienot arī citiem elementiem, piem. attēliem
+        <img id="btn" src="https://assets.bonappetit.com/photos/5ca534485e96521ff23b382b/1:1/w_2700,h_2700,c_limit/chocolate-chip-cookie.jpg" width="300" height="300">
+    
+        HTML pierakstītos event listeners var izsaukt arī savas funkcijas
+        <button onclick="myFunction()"></button>
+    -->
+</body>
+
+<script>
+    // Iegūstam elementu pēc elementa identifikatora 'id'
+    const el = document.getElementById("myId")
+    const btn = document.getElementById("btn")
+    const upgradeBtn = document.getElementById("upgradeBtn")
+
+    // Definējam mainīgos, kas spēles gaitā mēdz mainīties
+    let amount = 0
+    let bonus = 1
+    let cost = 25
+
+    // EventListener parametros ir divas daļas:
+    // 1. Kad notiks funkcija - piem. "click" notiks, kad lietotājs ir uzspiedis uz elementa 'btn'
+    // 2. Kas notiks, kad notikums būs sagaidīts
+    btn.addEventListener("click", () => {
+        amount += bonus // amount = amount + 1
+
+        // Maina 'el' elementa iekšējo HTML tekstu/kodu
+        // Parāda lietotājam amount vērtību
+        el.innerHTML = amount
+
+        // Maina 'el' elementa stilu, krāsu
+        el.style.color = "red"
+    })
+
+    // EventListener var izmantot savas definētās funkcijas
+    function upgrade() {
+        // Pārbauda, vai spelētājam pietiek nauda priekš uzlabojuma
+        if (amount >= cost) {
+            // Ja jā, nauda par uzlabojumu tiek noņemta
+            amount -= cost
+
+            // Klikšķa skaitlis tiek reizināts ar 2 (cik punktus spēlētājs iegūst pēc pogas noklikšķināšanas)
+            bonus *= 2
+
+            // Uzlabojuma cena reizinās ar 2
+            cost *= 2
+
+            // Tā kā esam mainījuši 'amount' vērtību, nepieciešams parādīt to atkal uz ekrāna
+            el.innerHTML = amount
+        } else {
+            // Ja punktu nepietiek, izvadam kļūdas ziņojumu
+            alert(`Nepietiek līdzekļu! Jums ir ${amount}, nepieciešams ${cost}!`)
+        }
+    }
+    // Pie EventListener otrā parametra ievietojam definētās funkcijas nosaukumu
+    upgradeBtn.addEventListener("click", upgrade)
+
+
+    // Elementu vērtības var iegūt un izvadīt ārā
+    console.log(el.innerHTML)
+
+    // Elementu vērtības var pārbaudīt un salīdzināt
+    if (el.innerHTML === "Virsraksts") {
+        console.log("Elementa innerHTML ir 'Virsraksts'")
+    }
+</script>
+
+</html>
