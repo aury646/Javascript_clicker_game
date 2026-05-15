@@ -41,6 +41,8 @@
     #counter{
         font-size: 40px;
         margin-bottom: 20px;
+        margin-top: 100px;
+        margin-bottom: -100px;
     }
 
     #mainBtn{
@@ -65,6 +67,13 @@
         font-size: 20px;
         cursor: url("box_glove_1.png") 16 16, pointer !important;
     }
+    
+    #clickCounter {
+       
+        top: 150px;
+        align-self: center;
+        color: white;
+    }
 </style>
 </head>
 
@@ -72,9 +81,11 @@
     <div class="header_images">
         <img id="flame" src="flame.gif">
         <img id="logo" src="logo.png">
+        <h2 id="clickCounter">0</h2>
     </div>
 
     <h1 id="counter">0</h1>
+    <h2 id="clickCounter">0</h2>
 
     <button id="mainBtn">
         <img id="Mouse" src="mouse_1.png">
@@ -92,6 +103,7 @@ const mainBtn = document.getElementById("mainBtn");
 const upgradeBtn = document.getElementById("upgradeBtn");
 const counter = document.getElementById("counter");
 const mouseImg = document.getElementById("Mouse");
+const clickCounter = document.getElementById("clickCounter");
 
 const images = {
     mouse_1: "mouse_1.png",
@@ -119,7 +131,9 @@ let level = 0;
 mainBtn.addEventListener("click", () => {
 
     amount += bonus;
+
     counter.textContent = amount;
+    clickCounter.textContent = `Clicks: ${amount}`;
 
     mouseImg.src = levels[level].hit;
 
@@ -133,11 +147,12 @@ function upgrade() {
 
     if (amount >= cost) {
 
-        amount -= cost;
+        amount = 0;
         bonus *= 2;
         cost *= 2;
 
         counter.textContent = amount;
+        clickCounter.textContent = `Clicks: ${amount}`;
         upgradeBtn.textContent = `Upgrade (${cost})`;
 
         if (level < levels.length - 1) {
