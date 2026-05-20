@@ -10,11 +10,11 @@
         font-family: Arial, sans-serif;
         text-align: center;
         margin-top: 40px;
-        cursor: url("box_glove_1.png"), auto;
+        cursor: url("images/box_glove_1.png"), auto;
     }
 
     *{
-        cursor: url("box_glove_1.png") 16 16, auto !important;
+        cursor: url("images/box_glove_1.png") 16 16, auto !important;
     }
 
     .header_images {
@@ -40,55 +40,57 @@
 
     #counter{
         font-size: 40px;
-        margin-bottom: 20px;
-        margin-top: 100px;
-        margin-bottom: -100px;
+        margin-top: 90px;
+        margin-bottom: -20px;
     }
 
     #mainBtn{
         border: none;
         background: none;
-        cursor: url("box_glove_1.png") 16 16, pointer !important;
+        cursor: url("images/box_glove_1.png") 16 16, pointer !important;
     }
 
     #Mouse{
         width: 50vw;
         max-width: 600px;
-        margin-top: 150px;
+        margin-top: 100px;
         object-fit: cover;
         border-radius: 20px;
         transition: 0.1s;
-        cursor: url("box_glove_1.png") 16 16, pointer !important;
+        cursor: url("images/box_glove_1.png") 16 16, pointer !important;
     }
 
     #upgradeBtn{
         margin-top: 20px;
         padding: 12px 24px;
         font-size: 20px;
-        cursor: url("box_glove_1.png") 16 16, pointer !important;
+        cursor: url("images/box_glove_1.png") 16 16, pointer !important;
     }
-    
+
     #clickCounter {
-       
-        top: 150px;
-        align-self: center;
         color: white;
+    }
+
+    #healthText {
+        font-size: 28px;
+        margin-top: 40px;
     }
 </style>
 </head>
 
 <body>
+
     <div class="header_images">
-        <img id="flame" src="flame.gif">
-        <img id="logo" src="logo.png">
-        <h2 id="clickCounter">0</h2>
+        <img id="flame" src="images/flame.gif">
+        <img id="logo" src="images/logo.png">
+        <h2 id="clickCounter">Clicks: 0</h2>
     </div>
 
     <h1 id="counter">0</h1>
-    <h2 id="clickCounter">0</h2>
+    <h2 id="healthText">Health: 100 / 100</h2>
 
     <button id="mainBtn">
-        <img id="Mouse" src="mouse_1.png">
+        <img id="Mouse" src="images/mouse_1.png">
     </button>
 
     <br>
@@ -104,36 +106,71 @@ const upgradeBtn = document.getElementById("upgradeBtn");
 const counter = document.getElementById("counter");
 const mouseImg = document.getElementById("Mouse");
 const clickCounter = document.getElementById("clickCounter");
+const healthText = document.getElementById("healthText");
 
 const images = {
-    mouse_1: "mouse_1.png",
-    mouse_1_hit: "mouse_1_hit.png",
-    mouse_2: "mouse_2.png",
-    mouse_2_hit: "mouse_2_hit.png",
-    mouse_3: "mouse_3.png",
-    mouse_3_hit: "mouse_3_hit.png",
-    mouse_4: "mouse_4.png",
-    mouse_4_hit: "mouse_4_hit.png"
+    mouse_1: "images/mouse_1.png",
+    mouse_1_hit: "images/mouse_1_hit.png",
+    mouse_2: "images/mouse_2.png",
+    mouse_2_hit: "images/mouse_2_hit.png",
+    mouse_3: "images/mouse_3.png",
+    mouse_3_hit: "images/mouse_3_hit.png",
+    mouse_4: "images/mouse_4.png",
+    mouse_4_hit: "images/mouse_4_hit.png"
 };
 
 const levels = [
-    { normal: images.mouse_1, hit: images.mouse_1_hit },
-    { normal: images.mouse_2, hit: images.mouse_2_hit },
-    { normal: images.mouse_3, hit: images.mouse_3_hit },
-    { normal: images.mouse_4, hit: images.mouse_4_hit }
+    {
+        normal: images.mouse_1,
+        hit: images.mouse_1_hit,
+        maxHealth: 100
+    },
+    {
+        normal: images.mouse_2,
+        hit: images.mouse_2_hit,
+        maxHealth: 200
+    },
+    {
+        normal: images.mouse_3,
+        hit: images.mouse_3_hit,
+        maxHealth: 500
+    },
+    {
+        normal: images.mouse_4,
+        hit: images.mouse_4_hit,
+        maxHealth: 1000
+    }
 ];
 
 let amount = 0;
 let bonus = 1;
 let cost = 25;
 let level = 0;
+let finished = false;
+
+let maxHealth = levels[level].maxHealth;
+let health = maxHealth;
+
+function updateUI() {
+    counter.textContent = amount;
+    clickCounter.textContent = `Clicks: ${amount}`;
+    healthText.textContent = `Health: ${health} / ${maxHealth}`;
+}
 
 mainBtn.addEventListener("click", () => {
 
-    amount += bonus;
+    if (finished) {
+        return;
+    }
 
-    counter.textContent = amount;
-    clickCounter.textContent = `Clicks: ${amount}`;
+    amount += bonus;
+    health -= bonus;
+
+    if (health < 0) {
+        health = 0;
+    }
+
+    updateUI();
 
     mouseImg.src = levels[level].hit;
 
@@ -141,13 +178,41 @@ mainBtn.addEventListener("click", () => {
         mouseImg.src = levels[level].normal;
     }, 300);
 
+    if (health <= 0) {
+
+        if (level < levels.length - 1) {
+
+            level++;
+
+            maxHealth = levels[level].maxHealth;
+            health = maxHealth;
+
+            mouseImg.src = levels[level].normal;
+
+        } else {
+
+            finished = true;
+
+            upgradeBtn.textContent = "Finish";
+
+            alert("Tu pabeidzi spēli!");
+        }
+
+        updateUI();
+    }
+
 });
 
 function upgrade() {
 
+    if (finished) {
+        return;
+    }
+
     if (amount >= cost) {
 
-        amount = 0;
+        amount -= cost;
+
         bonus *= 2;
         cost *= 2;
 
@@ -155,17 +220,15 @@ function upgrade() {
         clickCounter.textContent = `Clicks: ${amount}`;
         upgradeBtn.textContent = `Upgrade (${cost})`;
 
-        if (level < levels.length - 1) {
-            level++;
-            mouseImg.src = levels[level].normal;
-        }
-
     } else {
+
         alert(`Nepietiek līdzekļu! Jums ir ${amount}, nepieciešams ${cost}!`);
     }
 }
 
 upgradeBtn.addEventListener("click", upgrade);
+
+updateUI();
 
 </script>
 
